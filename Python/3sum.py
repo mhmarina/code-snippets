@@ -1,23 +1,30 @@
-# sliding window
-# array must first be sorted
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        # sort() is in place, sorted() returns new 
-        result = []
+    def threeSum(self, nums: list[int]) -> list[list[int]]:
+        # sort list first
         nums.sort()
-        print(nums)  
-        for i in range(len(nums)):
-            j = i + 1
-            k = len(nums) - 1
-            while(j < k):
-                curr_sum = (-nums[j])-nums[k]
-                target = nums[i]
-                if(curr_sum == target):
-                    n = [nums[i],nums[j],nums[k]]
-                    if n not in result:
-                        result.append(n)
-                if target < curr_sum:
-                    j += 1
+        results = []
+        # all must add up to 0
+        for i, num in enumerate(nums):
+            # hold one constant
+            if i > 0 and num == nums[i-1]:
+                continue
+
+            left = i + 1
+            right = len(nums) - 1
+
+            while(right > left):
+                total = nums[right] + nums[left] + num
+                if total > 0:
+                    right -= 1
+                elif total < 0:
+                    left += 1
                 else:
-                    k -= 1
-        return result
+                    res = [num, nums[left], nums[right]]
+                    results.append(res)
+                    left += 1
+                    right -= 1
+                    # move until we get a new number
+                    while(nums[left] == nums[left-1] and right > left):
+                        left += 1
+        
+        return results
